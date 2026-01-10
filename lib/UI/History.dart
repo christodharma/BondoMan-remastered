@@ -33,20 +33,17 @@ class _HistoryPageState extends State<HistoryPage> {
     ),
   ];
 
-  List<Widget> mapTransactionsToListItems(List<Transaction> transactions) {
-    List<Widget> ret = [];
-    for (var tr in transactions) {
-      ret.add(_HistoryItem(transaction: tr));
-    }
-    return ret;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Align(
         alignment: Alignment.topCenter,
-        child: Column(children: mapTransactionsToListItems(transactions)),
+        child: ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (context, index) {
+            return _HistoryItem(transaction: transactions[index]);
+          },
+        ),
       ),
     );
   }
