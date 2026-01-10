@@ -29,6 +29,7 @@ class _TransactionInputState extends State<TransactionInput> {
           child: Column(
             spacing: 16,
             children: [
+              // input item name
               TextFormField(
                 onChanged: (String? value) {
                   input.name = value;
@@ -38,19 +39,23 @@ class _TransactionInputState extends State<TransactionInput> {
                   border: OutlineInputBorder(),
                 ),
               ),
+              // input nominal
               TextFormField(
                 keyboardType: .number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 onChanged: (String? value) {
-                  // TODO add callback
+                  if (value != null) {
+                    input.nominal = double.tryParse(value);
+                  }
                 },
                 decoration: const InputDecoration(
                   labelText: "Price",
                   border: OutlineInputBorder(),
                 ),
               ),
+              // input category
               RadioGroup<Category>(
                 groupValue: input.category,
                 onChanged: (Category? value) {
@@ -60,19 +65,42 @@ class _TransactionInputState extends State<TransactionInput> {
                 },
                 child: Column(
                   children: [
+                    Text("Category"),
                     ListTile(
                       title: const Text("Pengeluaran"),
-                      leading: Radio<Category>(value: Category.send),
+                      leading: Radio<Category>(
+                        value: Category.send,
+                        activeColor: Colors.red,
+                      ),
                     ),
                     ListTile(
                       title: const Text("Pemasukan"),
-                      leading: Radio<Category>(value: Category.receive),
+                      leading: Radio<Category>(value: Category.receive,
+                        activeColor: Colors.green,),
                     ),
                   ],
                 ),
               ),
-              // TODO date picker button calling date picker dialog
-              // TODO submit button
+              // input date
+              ElevatedButton.icon(
+                icon: const Icon(Icons.calendar_today),
+                onPressed: () async {
+                  var pickedDate = await showDatePicker(
+                    context: context,
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2024),
+                    lastDate: DateTime.now(),
+                  );
+                  setState(() {
+                    input.dateTime = pickedDate;
+                  });
+                },
+                label: const Text('Pick a date'),
+              ),
+              ElevatedButton.icon(onPressed: () {
+                // TODO add callback (run validation to input obj!)
+              }, label: Text("Submit"))
             ],
           ),
         ),
