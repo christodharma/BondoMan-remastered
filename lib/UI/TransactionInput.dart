@@ -10,13 +10,39 @@ class TransactionInput extends StatefulWidget {
 }
 
 class _TransactionInputState extends State<TransactionInput> {
-  late Transaction input = Transaction(
-    name: null,
-    nominal: null,
-    category: null,
-    location: null,
-    dateTime: null,
-  );
+  final nameController = TextEditingController();
+  final nominalController = TextEditingController();
+  Category? category;
+  final locationController = TextEditingController();
+  DateTime? dateTime;
+
+  Transaction toTransaction() {
+    return Transaction(
+      name: nameController.text,
+      nominal: double.tryParse(nominalController.text),
+      category: category,
+      location: locationController.text,
+      dateTime: dateTime,
+    );
+  }
+
+  void fromTransaction(Transaction source) {
+    nameController.text = source.name ?? "";
+    nominalController.text = source.nominal.toString();
+    category = source.category;
+    locationController.text = source.location ?? "";
+    dateTime = source.dateTime;
+  }
+
+  //TODO implement initState
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    nominalController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +57,7 @@ class _TransactionInputState extends State<TransactionInput> {
             children: [
               // input item name
               TextFormField(
-                onChanged: (String? value) {
-                  input.name = value;
-                },
+                controller: nameController,
                 decoration: const InputDecoration(
                   labelText: "Item Name",
                   border: OutlineInputBorder(),
@@ -45,11 +69,7 @@ class _TransactionInputState extends State<TransactionInput> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly,
                 ],
-                onChanged: (String? value) {
-                  if (value != null) {
-                    input.nominal = double.tryParse(value);
-                  }
-                },
+                controller: nominalController,
                 decoration: const InputDecoration(
                   labelText: "Price",
                   border: OutlineInputBorder(),
@@ -57,10 +77,10 @@ class _TransactionInputState extends State<TransactionInput> {
               ),
               // input category
               RadioGroup<Category>(
-                groupValue: input.category,
+                groupValue: category,
                 onChanged: (Category? value) {
                   setState(() {
-                    input.category = value;
+                    category = value;
                   });
                 },
                 child: Column(
@@ -75,8 +95,10 @@ class _TransactionInputState extends State<TransactionInput> {
                     ),
                     ListTile(
                       title: const Text("Pemasukan"),
-                      leading: Radio<Category>(value: Category.receive,
-                        activeColor: Colors.green,),
+                      leading: Radio<Category>(
+                        value: Category.receive,
+                        activeColor: Colors.green,
+                      ),
                     ),
                   ],
                 ),
@@ -93,14 +115,17 @@ class _TransactionInputState extends State<TransactionInput> {
                     lastDate: DateTime.now(),
                   );
                   setState(() {
-                    input.dateTime = pickedDate;
+                    dateTime = pickedDate;
                   });
                 },
                 label: const Text('Pick a date'),
               ),
-              ElevatedButton.icon(onPressed: () {
-                // TODO add callback (run validation to input obj!)
-              }, label: Text("Submit"))
+              ElevatedButton.icon(
+                onPressed: () {
+                  // TODO add callback (run validation to input obj!)
+                },
+                label: Text("Submit"),
+              ),
             ],
           ),
         ),
