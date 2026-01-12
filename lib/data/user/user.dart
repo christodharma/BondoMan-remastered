@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class User {
   final String username;
   final String key;
@@ -7,14 +5,13 @@ class User {
   const User._(this.username, this.key);
 
   factory User(String user, String password) {
-    return User(user, _hashPassword(password));
+    return User._(user, _hashPassword(password));
   }
 
   Map<String, dynamic> toJson() => {'username': username, 'key': key};
 
   static String _hashPassword(String password) {
     // TODO implement password hashing
-    utf8.encode(password);
 
     return password;
   }
