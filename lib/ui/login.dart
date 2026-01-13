@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_1/data/authorization/i_authorization.dart';
+import 'package:flutter_project_1/data/authorization/mock_authorization.dart';
+import 'package:flutter_project_1/data/user/user.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -11,11 +14,20 @@ class _LoginState extends State<Login> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   bool _passwordVisibility = false;
+  final IAuthorization auth = MockAuthorization();
 
   void loginSubmit() {
     var username = usernameController.text;
     var password = passwordController.text;
-    // TODO login submission
+
+    auth.authorize(User(username, password)).then((result) {
+      if (result.success) {
+        // TODO login callback (session, redirect to main page)
+        print("success");
+      } else {
+        print("fail");
+      }
+    });
   }
 
   void togglePasswordVisibility() {

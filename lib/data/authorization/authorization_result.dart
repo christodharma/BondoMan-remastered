@@ -1,6 +1,11 @@
 class AuthorizationResult {
-  bool success = false;
-  String? reason;
+  final bool success;
+  final String? reason;
 
-  AuthorizationResult({required this.success, required this.reason});
+  const AuthorizationResult({required this.success, required this.reason});
+
+  static const noDebugResult = AuthorizationResult(
+    success: false,
+    reason: "App is calling debug mode features in release mode",
+  );
 }

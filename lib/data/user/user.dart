@@ -18,9 +18,10 @@ class User {
 
   //TODO consider object equality comparison for login verification
   @override
-  bool operator ==(Object other) => other is User && username == other.username;
+  bool operator ==(Object other) =>
+      other is User && username == other.username && key == other.key;
 
   @override
   // TODO: implement hashCode
-  int get hashCode => username.hashCode;
+  int get hashCode => Object.hash(username, key);
 }
