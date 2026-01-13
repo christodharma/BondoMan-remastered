@@ -1,14 +1,12 @@
 class Transaction {
-  final int id;
+  int? id;
   String? name;
   double? nominal;
   Category? category;
   String? location;
   DateTime? dateTime;
 
-  static int _idCounter = 0;
-
-  Transaction._(
+  Transaction(
     this.id,
     this.name,
     this.nominal,
@@ -17,24 +15,47 @@ class Transaction {
     this.dateTime,
   );
 
-  factory Transaction({
-    required String name,
-    required double nominal,
-    required Category category,
-    required String location,
-    required DateTime dateTime,
-  }) {
-    var ret = Transaction._(
-      _idCounter,
-      name,
-      nominal,
-      category,
-      location,
-      dateTime,
-    );
-    _idCounter++;
-    return ret;
+  Transaction.withNoId(
+    this.name,
+    this.nominal,
+    this.category,
+    this.location,
+    this.dateTime,
+  ) : id = null; // TODO make an UID generator
+
+  Transaction.addId(Transaction old, int id)
+    : this(id, old.name, old.nominal, old.category, old.location, old.dateTime);
+
+  @override
+  bool operator ==(Object other) =>
+      other is Transaction && other.id != null && id == other.id;
+
+  bool approximately(Object other) {
+    if (other is Transaction) {
+      // other field == null -> not considering that field
+      if (other.name != null && name != other.name) {
+        return false;
+      }
+      if (other.nominal != null && nominal != other.nominal) {
+        return false;
+      }
+      if (other.category != null && category != other.category) {
+        return false;
+      }
+      if (other.location != null && location != other.location) {
+        return false;
+      }
+      if (other.dateTime != null && dateTime != other.dateTime) {
+        return false;
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 enum Category { send, receive }
