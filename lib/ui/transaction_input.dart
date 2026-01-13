@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_project_1/data/transaction.dart';
+import 'package:flutter_project_1/data/transaction/transaction.dart';
 
 class TransactionInput extends StatefulWidget {
   const TransactionInput({super.key});
@@ -17,7 +17,7 @@ class _TransactionInputState extends State<TransactionInput> {
   DateTime? dateTime;
 
   Transaction toTransaction() {
-    return Transaction(
+    return Transaction.withNoId(
       name: nameController.text,
       nominal: double.tryParse(nominalController.text),
       category: category,

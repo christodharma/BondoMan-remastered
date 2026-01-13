@@ -7,18 +7,18 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   late ITransactionDb db;
   late Transaction transaction1 = Transaction.withNoId(
-    "Es Teler",
-    25000,
-    .send,
-    "Malang",
-    DateTime(25, 5, 27),
+    name: "Es Teler",
+    nominal: 25000,
+    category: .send,
+    location: "Malang",
+    dateTime: DateTime(25, 5, 27),
   );
   late Transaction transaction2 = Transaction.withNoId(
-    "Es Doger",
-    20000,
-    .send,
-    "Malang",
-    DateTime(25, 5, 27),
+    name: "Es Doger",
+    nominal: 20000,
+    category: .send,
+    location: "Malang",
+    dateTime: DateTime(25, 5, 27),
   );
 
   setUp(() {
@@ -52,11 +52,11 @@ void main() {
 
   test("create, read, and update", () async {
     await db.create(transaction1);
-    var resultId;
+    int resultId;
     final beforeUpdate = await db.read(
       TransactionDbQueryBuilder().withName("Es Teler").build(),
     );
-    resultId = beforeUpdate[0].id;
+    resultId = beforeUpdate[0].id!;
 
     // update
     beforeUpdate[0].name = "Es Degan";
@@ -82,7 +82,7 @@ void main() {
 
     // delete
     var deleteSuccess = await db.delete(
-      TransactionDbQueryBuilder().withId(resultId).build()
+      TransactionDbQueryBuilder().withId(resultId).build(),
     );
     expect(deleteSuccess, true);
 

@@ -39,7 +39,22 @@ class TransactionDbQueryBuilder {
   }
 
   Transaction build() {
-    if (id != null) return Transaction(id, name, nominal, category, location, dateTime);
-    return Transaction.withNoId(name, nominal, category, location, dateTime);
+    if (id != null) {
+      return Transaction(
+        id: id,
+        name: name,
+        nominal: nominal,
+        category: category,
+        location: location,
+        dateTime: dateTime,
+      );
+    }
+    return Transaction.withNoId(
+      name: name,
+      nominal: nominal,
+      category: category,
+      location: location,
+      dateTime: dateTime,
+    );
   }
 }

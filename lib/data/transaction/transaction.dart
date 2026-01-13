@@ -6,25 +6,29 @@ class Transaction {
   String? location;
   DateTime? dateTime;
 
-  Transaction(
-    this.id,
-    this.name,
-    this.nominal,
-    this.category,
-    this.location,
-    this.dateTime,
-  );
+  Transaction({
+    required this.id,
+    required this.name,
+    required this.nominal,
+    required this.category,
+    required this.location,
+    required this.dateTime,
+  });
 
-  Transaction.withNoId(
-    this.name,
-    this.nominal,
-    this.category,
-    this.location,
-    this.dateTime,
-  ) : id = null; // TODO make an UID generator
+  Transaction.withNoId({
+    required this.name,
+    required this.nominal,
+    required this.category,
+    required this.location,
+    required this.dateTime,
+  }) : id = null; // TODO make an UID generator
 
-  Transaction.addId(Transaction old, int id)
-    : this(id, old.name, old.nominal, old.category, old.location, old.dateTime);
+  Transaction.addId(Transaction old, int this.id)
+    : name = old.name,
+      nominal = old.nominal,
+      category = old.category,
+      location = old.location,
+      dateTime = old.dateTime;
 
   @override
   bool operator ==(Object other) =>
