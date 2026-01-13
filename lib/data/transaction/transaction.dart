@@ -33,6 +33,14 @@ class Transaction {
   bool approximately(Object other) {
     if (other is Transaction) {
       // other field == null -> not considering that field
+      // but if all other field == null -> not considering at all -> false
+      if (other.name == null &&
+          other.nominal == null &&
+          other.category == null &&
+          other.location == null &&
+          other.dateTime == null) {
+        return false;
+      }
       if (other.name != null && name != other.name) {
         return false;
       }

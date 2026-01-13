@@ -33,17 +33,6 @@ class MockTransactionDb implements ITransactionDb {
       return queryById;
     }
 
-    return _approximateRead(query);
-  }
-
-  List<Transaction> _approximateRead(Transaction query) {
-    if (query.name == null &&
-        query.nominal == null &&
-        query.category == null &&
-        query.location == null &&
-        query.dateTime == null) {
-      return [];
-    }
     var queryByFields = list.where((tr) => tr.approximately(query)).toList();
     return queryByFields;
   }
