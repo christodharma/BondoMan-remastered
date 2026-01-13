@@ -1,9 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
 import 'package:flutter_project_1/data/transaction/i_transaction_db.dart';
 
 class MockTransactionDb implements ITransactionDb {
   List<Transaction> list = [];
   static int _intCounter = 0;
+
+  factory MockTransactionDb() {
+    if (!kDebugMode) {
+      throw Exception("App mistakenly called debug only feature");
+    }
+    return MockTransactionDb();
+  }
 
   @override
   Future<bool> create(Transaction transaction) async {
