@@ -1,11 +1,12 @@
-import 'package:flutter_project_1/data/transaction/i_transaction_db.dart';
-import 'package:flutter_project_1/data/transaction/mock_transaction_db.dart';
+import 'package:flutter_project_1/data/mocks/mock_transaction_db.dart';
+import 'package:flutter_project_1/data/transaction/service/i_transaction_db_conn.dart';
+import 'package:flutter_project_1/data/transaction/service/mock_transaction_db_conn.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
 import 'package:flutter_project_1/data/transaction/transaction_db_query.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  late ITransactionDb db;
+  late ITransactionDbConnection db = MockTransactionDbConnection();
   late Transaction transaction1 = Transaction.withNoId(
     name: "Es Teler",
     nominal: 25000,
@@ -22,13 +23,7 @@ void main() {
   );
 
   setUp(() {
-    db = MockTransactionDb();
-  });
-
-  tearDown(() {
-    var mockDb = db as MockTransactionDb;
-    mockDb.dispose();
-    db = mockDb;
+    MockTransactionDb.dispose();
   });
 
   test("create", () async {

@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
+import 'package:flutter_project_1/data/transaction/service/mock_transaction_db_conn.dart';
+import 'package:flutter_project_1/ui/transaction_input/transaction_input.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) =>
+            TransactionDbRepository(MockTransactionDbConnection()),
+      ),
+    ],
+    child: MyApp(),
+  ),
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -28,7 +42,8 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
+      // home: const SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
+      home: const SafeArea(child: TransactionInput()),
     );
   }
 }
