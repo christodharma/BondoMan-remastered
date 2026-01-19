@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_project_1/data/user/user.dart';
+import 'package:flutter_project_1/data/user.dart';
 
+// a mock external system for user authentication db
 class TestUserList {
   static List<User> get users {
     if (!kDebugMode) {

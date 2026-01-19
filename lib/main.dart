@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/ui/Login.dart';
+import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
+import 'package:flutter_project_1/data/authorization/service/mock_auth.dart';
+import 'package:flutter_project_1/ui/login/Login.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => AuthorizationRepository(MockAuthorization()),
+      ),
+    ],
+    child: MyApp(),
+  ),
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
