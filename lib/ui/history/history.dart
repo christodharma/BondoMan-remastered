@@ -1,48 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
+import 'package:flutter_project_1/ui/history/history_viewmodel.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_project_1/ui/transaction_input/transaction_input.dart';
 
-class HistoryPage extends StatefulWidget {
-  const HistoryPage({super.key});
+class History extends StatelessWidget {
+  const History({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _HistoryPageState();
-}
-
-class _HistoryPageState extends State<HistoryPage> {
-  final transactions = <Transaction>[
-    Transaction.withNoId(
-      name: "Mi Ayam",
-      nominal: 15000,
-      category: Category.send,
-      location: "Malang",
-      dateTime: DateTime.now(),
-    ),
-    Transaction.withNoId(
-      name: "Mi Ayam",
-      nominal: 15000,
-      category: Category.send,
-      location: "Malang",
-      dateTime: DateTime.now(),
-    ),
-    Transaction.withNoId(
-      name: "Mi Ayam",
-      nominal: 15000,
-      category: Category.send,
-      location: "Malang",
-      dateTime: DateTime.now(),
-    ),
-  ];
+  static const routeName = "/";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: ListView.builder(
-          itemCount: transactions.length,
-          itemBuilder: (context, index) {
-            return _HistoryItem(transaction: transactions[index]);
+    return ChangeNotifierProvider(
+      create: (BuildContext context) =>
+          HistoryViewModel(context.read<TransactionDbRepository>())..load(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Text("Transactions"),
+        ),
+        body: Align(
+          alignment: .topCenter,
+          child: Consumer<HistoryViewModel>(
+            builder:
+                (BuildContext context, HistoryViewModel value, Widget? child) =>
+                    FutureBuilder(
+                      future: value.load(),
+                      builder: (context, snapshot) => ListView.builder(
+                        itemCount: snapshot.data != null
+                            ? snapshot.data!.length
+                            : 0,
+                        itemBuilder: (context, index) =>
+                            _HistoryItem(transaction: snapshot.data![index]),
+                      ),
+                    ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, TransactionInput.routeName);
           },
+          child: const Icon(Icons.add),
         ),
       ),
     );
