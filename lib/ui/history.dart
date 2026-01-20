@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/Data/transaction.dart';
+import 'package:flutter_project_1/Data/transaction/transaction.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});

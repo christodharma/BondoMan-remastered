@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_project_1/Data/Transaction.dart';
+import 'package:flutter_project_1/data/transaction.dart';
 
 class TransactionInput extends StatefulWidget {
   const TransactionInput({super.key});
