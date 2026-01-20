@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
 import 'package:flutter_project_1/ui/history/history_viewmodel.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_project_1/ui/transaction_input/transaction_input.dart';
+import 'package:provider/provider.dart';
 
 class History extends StatelessWidget {
   const History({super.key});
@@ -24,17 +24,16 @@ class History extends StatelessWidget {
           alignment: .topCenter,
           child: Consumer<HistoryViewModel>(
             builder:
-                (BuildContext context, HistoryViewModel value, Widget? child) =>
-                    FutureBuilder(
-                      future: value.load(),
-                      builder: (context, snapshot) => ListView.builder(
-                        itemCount: snapshot.data != null
-                            ? snapshot.data!.length
-                            : 0,
-                        itemBuilder: (context, index) =>
-                            _HistoryItem(transaction: snapshot.data![index]),
-                      ),
-                    ),
+                (BuildContext context, HistoryViewModel value, Widget? child) {
+                  if (value.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return ListView.builder(
+                    itemCount: value.transactions.length,
+                    itemBuilder: (context, index) =>
+                        _HistoryItem(transaction: value.transactions[index]),
+                  );
+                },
           ),
         ),
         floatingActionButton: FloatingActionButton(

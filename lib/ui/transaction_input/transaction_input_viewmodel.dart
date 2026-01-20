@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/data/mocks/mock_transaction_db.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
 
@@ -26,7 +25,6 @@ class TransactionInputViewModel extends ChangeNotifier {
       return false;
     }
     var category = categoryInt == 0 ? Category.send : Category.receive;
-    print("Before add: ${MockTransactionDb.counter} items");
     await repo.create(
       Transaction.withNoId(
         name: nameController.text,
@@ -36,7 +34,6 @@ class TransactionInputViewModel extends ChangeNotifier {
         dateTime: dateTime,
       ),
     );
-    print("After add: ${MockTransactionDb.counter} items");
     return true;
   }
 }

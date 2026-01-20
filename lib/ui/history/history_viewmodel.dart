@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
@@ -11,10 +9,17 @@ class HistoryViewModel extends ChangeNotifier {
   List<Transaction> _transactions = [];
 
   bool get isLoading => _loading;
+  List<Transaction> get transactions => _transactions;
 
-  HistoryViewModel(this._repo);
+  HistoryViewModel(this._repo) {
+    _repo.addListener(_onAdd);
+  }
 
-  Future<List<Transaction>> load() async {
+  void _onAdd(){
+    load();
+  }
+
+  Future<void> load() async {
     _loading = true;
     notifyListeners();
 
@@ -22,8 +27,6 @@ class HistoryViewModel extends ChangeNotifier {
 
     _loading = false;
     notifyListeners();
-
-    return _transactions;
   }
 
   // TODO route to transaction edit
