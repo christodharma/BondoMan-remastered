@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 class TransactionInput extends StatefulWidget {
   const TransactionInput({super.key});
 
+  static const routeName = "/input";
+
   @override
   State<TransactionInput> createState() => _TransactionInputState();
 }
@@ -46,6 +48,9 @@ class _TransactionInputState extends State<TransactionInput> {
       create: (BuildContext context) =>
           TransactionInputViewModel(context.read<TransactionDbRepository>()),
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        ),
         body: Consumer<TransactionInputViewModel>(
           builder:
               (BuildContext context,

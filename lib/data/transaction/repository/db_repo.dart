@@ -9,15 +9,18 @@ class TransactionDbRepository extends ChangeNotifier {
   TransactionDbRepository(this.conn);
 
   Future<bool> create(Transaction transaction) async {
-    return await conn.create(transaction);
-  }
-
-  Future<List<Transaction>> readAll() async {
-    if (_cache != null) {
-      return _cache!;
-    }
-    final result = await conn.readAll();
-    _cache = result;
+    var result = await conn.create(transaction);
+    _cache = null;
+    notifyListeners();
     return result;
   }
+
+  Future<List<Transaction>> getAll() async {
+    if (_cache != null) return _cache!;
+    _cache = await conn.readAll();
+    notifyListeners();
+    return _cache!;
+  }
+
+  // TODO add editing transactions
 }

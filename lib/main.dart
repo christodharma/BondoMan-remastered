@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/service/mock_transaction_db_conn.dart';
+import 'package:flutter_project_1/ui/history/history.dart';
 import 'package:flutter_project_1/ui/transaction_input/transaction_input.dart';
 import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
 import 'package:flutter_project_1/data/authorization/service/mock_auth.dart';
@@ -47,8 +48,12 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      // home: const SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
-      home: const SafeArea(child: Login()),
+      // home: const SafeArea(child: Login()),
+      initialRoute: '/',
+      routes: {
+        History.routeName: (context) => const History(),
+        TransactionInput.routeName: (context) => const TransactionInput(),
+      },
     );
   }
 }
