@@ -1,0 +1,91 @@
+import 'package:flutter_project_1/data/mocks/mock_transaction_db.dart';
+import 'package:flutter_project_1/data/transaction/service/i_transaction_db_conn.dart';
+import 'package:flutter_project_1/data/transaction/service/mock_transaction_db_conn.dart';
+import 'package:flutter_project_1/data/transaction/transaction.dart';
+import 'package:flutter_project_1/data/transaction/transaction_db_query.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  late ITransactionDbConnection db = MockTransactionDbConnection();
+  late Transaction transaction1 = Transaction.withNoId(
+    name: "Es Teler",
+    nominal: 25000,
+    category: .send,
+    location: "Malang",
+    dateTime: DateTime(25, 5, 27),
+  );
+  late Transaction transaction2 = Transaction.withNoId(
+    name: "Es Doger",
+    nominal: 20000,
+    category: .send,
+    location: "Malang",
+    dateTime: DateTime(25, 5, 27),
+  );
+
+  setUp(() {
+    MockTransactionDb.dispose();
+  });
+
+  test("create", () async {
+    await db.create(transaction1);
+    final newDb = await db.readAll();
+    expect(newDb.length, 1);
+
+    expect(newDb[0].id, 1);
+  });
+
+  test("create and read", () async {
+    await db.create(transaction1);
+    await db.create(transaction2);
+    final query = await db.read(
+      TransactionDbQueryBuilder().withName("Es Doger").build(),
+    );
+
+    expect(query.length, 1);
+    expect(query[0].id, 2);
+  });
+
+  test("create, read, and update", () async {
+    await db.create(transaction1);
+    int resultId;
+    final beforeUpdate = await db.read(
+      TransactionDbQueryBuilder().withName("Es Teler").build(),
+    );
+    resultId = beforeUpdate[0].id!;
+
+    // update
+    beforeUpdate[0].name = "Es Degan";
+    await db.update(beforeUpdate[0]);
+
+    // check by reread
+    db.read(TransactionDbQueryBuilder().withId(resultId).build()).then((
+      result,
+    ) {
+      expect(result[0].name, isNot("Es Teler"));
+    });
+  });
+
+  test("create, read, and delete", () async {
+    await db.create(transaction1);
+    await db.create(transaction2);
+
+    final beforeDelete = await db.read(
+      TransactionDbQueryBuilder().withId(1).build(),
+    );
+    var resultId = beforeDelete[0].id!;
+    expect(resultId, 1);
+
+    // delete
+    var deleteSuccess = await db.delete(
+      TransactionDbQueryBuilder().withId(resultId).build(),
+    );
+    expect(deleteSuccess, true);
+
+    // check by reread
+    db.read(TransactionDbQueryBuilder().withId(resultId).build()).then((
+      result,
+    ) {
+      expect(result.length, 0);
+    });
+  });
+}

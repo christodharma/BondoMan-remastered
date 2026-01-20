@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/Data/transaction/transaction.dart';
+import 'package:flutter_project_1/data/transaction/transaction.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -10,21 +10,21 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   final transactions = <Transaction>[
-    Transaction(
+    Transaction.withNoId(
       name: "Mi Ayam",
       nominal: 15000,
       category: Category.send,
       location: "Malang",
       dateTime: DateTime.now(),
     ),
-    Transaction(
+    Transaction.withNoId(
       name: "Mi Ayam",
       nominal: 15000,
       category: Category.send,
       location: "Malang",
       dateTime: DateTime.now(),
     ),
-    Transaction(
+    Transaction.withNoId(
       name: "Mi Ayam",
       nominal: 15000,
       category: Category.send,

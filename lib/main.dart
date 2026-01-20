@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
+import 'package:flutter_project_1/data/transaction/service/mock_transaction_db_conn.dart';
+import 'package:flutter_project_1/ui/transaction_input/transaction_input.dart';
 import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
 import 'package:flutter_project_1/data/authorization/service/mock_auth.dart';
 import 'package:flutter_project_1/ui/login/Login.dart';
@@ -8,8 +11,11 @@ void main() => runApp(
   MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (context) => AuthorizationRepository(MockAuthorization()),
-      ),
+        create: (context) =>
+            TransactionDbRepository(MockTransactionDbConnection())),
+      ChangeNotifierProvider(
+        create: (context) =>
+            AuthorizationRepository(MockAuthorization())),
     ],
     child: MyApp(),
   ),
