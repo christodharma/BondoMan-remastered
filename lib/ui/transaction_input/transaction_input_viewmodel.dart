@@ -9,31 +9,25 @@ class TransactionInputViewModel extends ChangeNotifier {
   TransactionInputViewModel(this.repo);
 
   Future<bool> submitTransaction({
-    required TextEditingController nameController,
-    required TextEditingController nominalStringController,
-    int? categoryInt,
-    required TextEditingController locationController,
-    DateTime? dateTime,
+    required String name,
+    required String nominalString,
+    required int categoryInt,
+    required String location,
+    required DateTime dateTime,
   }) async {
-    if (nameController.text.isEmpty ||
-        nominalStringController.text.isEmpty ||
-        locationController.text.isEmpty ||
-        categoryInt == null ||
-        dateTime == null
-    ) {
+    if (name.isEmpty || nominalString.isEmpty || location.isEmpty) {
       errorMessage = "All fields must be filled!";
       return false;
     }
     var category = categoryInt == 0 ? Category.send : Category.receive;
-    await repo.create(
+    return repo.create(
       Transaction.withNoId(
-        name: nameController.text,
-        nominal: double.parse(nominalStringController.text),
+        name: name,
+        nominal: double.parse(nominalString),
         category: category,
-        location: locationController.text,
+        location: location,
         dateTime: dateTime,
       ),
     );
-    return true;
   }
 }

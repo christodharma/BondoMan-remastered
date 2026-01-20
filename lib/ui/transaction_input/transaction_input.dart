@@ -14,36 +14,33 @@ class TransactionInput extends StatefulWidget {
 }
 
 class _TransactionInputState extends State<TransactionInput> {
-  final nameController = TextEditingController();
-  final nominalController = TextEditingController();
-  int? category;
-  final locationController = TextEditingController();
-  DateTime? dateTime;
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _nominalController = TextEditingController();
+  final _categoryKey = GlobalKey<FormFieldState<int>>();
+  final _locationController = TextEditingController();
+  final _dateTimeKey = GlobalKey<FormFieldState<DateTime>>();
 
-  void _pressPickDate() async {
-    var pickedDate = await showDatePicker(
-      context: context,
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
-      lastDate: DateTime.now(),
-    );
-    setState(() {
-      dateTime = pickedDate;
-    });
+  String? _validateTextInput(String? value) {
+    if (value!.isEmpty) {
+      return "Field can't be empty";
+    }
+    if (!RegExp(r'^[a-zA-Z0-9 _.\-()]+$').hasMatch(value)) {
+      return "Item name contains invalid characters";
+    }
+    return null;
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    nominalController.dispose();
-    locationController.dispose();
+    _nameController.dispose();
+    _nominalController.dispose();
+    _locationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //TODO add validators
     return ChangeNotifierProvider(
       create: (BuildContext context) =>
           TransactionInputViewModel(context.read<TransactionDbRepository>()),
@@ -53,112 +50,158 @@ class _TransactionInputState extends State<TransactionInput> {
         ),
         body: Consumer<TransactionInputViewModel>(
           builder:
-              (BuildContext context,
-              TransactionInputViewModel value,
-              Widget? child,) {
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                // input item name
-                Padding(
-                  padding: .directional(top: 8, bottom: 8),
-                  child: TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: "Item Name",
-                      border: OutlineInputBorder(),
+              (
+                BuildContext context,
+                TransactionInputViewModel value,
+                Widget? child,
+              ) => Form(
+                key: _formKey,
+                child: Column(
+                  spacing: 16,
+                  children: [
+                    // input item name
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: "Item Name",
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: _validateTextInput,
                     ),
-                  ),
-                ),
-                // input nominal
-                Padding(
-                  padding: .directional(top: 8, bottom: 8),
-                  child: TextFormField(
-                    keyboardType: .number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    controller: nominalController,
-                    decoration: const InputDecoration(
-                      labelText: "Price",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                // input transaction location
-                Padding(
-                  padding: .directional(top: 8, bottom: 8),
-                  child: TextFormField(
-                    controller: locationController,
-                    decoration: const InputDecoration(
-                      labelText: "Location",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                // input category
-                Padding(
-                  padding: .directional(top: 8, bottom: 8),
-                  child: RadioGroup<int>(
-                    groupValue: category,
-                    onChanged: (int? value) {
-                      setState(() {
-                        category = value;
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Text("Category"),
-                        ListTile(
-                          title: const Text("Pengeluaran"),
-                          leading: Radio<int>(
-                              value: 0, activeColor: Colors.red),
-                        ),
-                        ListTile(
-                          title: const Text("Pemasukan"),
-                          leading: Radio<int>(
-                              value: 1, activeColor: Colors.green),
-                        ),
+                    // input nominal
+                    TextFormField(
+                      keyboardType: .number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
+                      controller: _nominalController,
+                      decoration: const InputDecoration(
+                        labelText: "Price",
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: _validateTextInput,
                     ),
-                  ),
-                ),
-                // input date
-                Padding(
-                  padding: .directional(top: 8, bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: .spaceBetween,
-                    children: [
-                      Text(
-                        dateTime != null
-                            ? "${dateTime!.day}/${dateTime!.month}/${dateTime!
-                            .year}"
-                            : "Pick a date",
+                    // input transaction location
+                    TextFormField(
+                      controller: _locationController,
+                      decoration: const InputDecoration(
+                        labelText: "Location",
+                        border: OutlineInputBorder(),
                       ),
-                      OutlinedButton.icon(
-                        onPressed: _pressPickDate,
-                        label: Text("Pick date"),
+                      validator: _validateTextInput,
+                    ),
+                    // input category
+                    FormField<int>(
+                      key: _categoryKey,
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select an option';
+                        }
+                        return null;
+                      },
+                      builder: (state) {
+                        return RadioGroup<int>(
+                          groupValue: state.value,
+                          onChanged: (int? value) {
+                            state.didChange(value);
+                          },
+                          child: Column(
+                            children: [
+                              Text("Category"),
+                              RadioListTile(
+                                value: 0,
+                                activeColor: Colors.red,
+                                title: const Text("Pengeluaran"),
+                              ),
+                              RadioListTile(
+                                value: 1,
+                                activeColor: Colors.green,
+                                title: const Text("Pemasukan"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    // input date
+                    FormField<DateTime>(
+                      key: _dateTimeKey,
+                      validator: (value) {
+                        if (value == null) {
+                          return "Pick date of transaction";
+                        }
+                        return null;
+                      },
+                      builder: (FormFieldState<DateTime> field) => Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          Text(
+                            field.value != null
+                                ? "${field.value!.day}/${field.value!.month}/${field.value!.year}"
+                                : "Pick a date",
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: () async {
+                              final pickedDate = await showDatePicker(
+                                context: context,
+                                initialEntryMode:
+                                    DatePickerEntryMode.calendarOnly,
+                                initialDate: field.value ?? DateTime.now(),
+                                firstDate: DateTime.now().copyWith(
+                                  year: DateTime.now().year - 1,
+                                ),
+                                lastDate: DateTime.now(),
+                              );
+                              if (pickedDate != null) {
+                                field.didChange(pickedDate);
+                              }
+                            },
+                            label: Text("Pick date"),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    // submit button
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (!_formKey.currentState!.validate()) return;
+                        if (_categoryKey.currentState!.hasError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                _categoryKey.currentState!.errorText!,
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+                        if (_dateTimeKey.currentState!.hasError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                _dateTimeKey.currentState!.errorText!,
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Processing...')),
+                        );
+                        value.submitTransaction(
+                          name: _nameController.text,
+                          nominalString: _nominalController.text,
+                          categoryInt: _categoryKey.currentState!.value!,
+                          location: _locationController.text,
+                          dateTime: _dateTimeKey.currentState!.value!,
+                        );
+                      },
+                      label: Text("Submit"),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: .directional(top: 8, bottom: 8),
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      value.submitTransaction(
-                          nameController: nameController,
-                          nominalStringController: nominalController,
-                          categoryInt: category,
-                          locationController: locationController,
-                          dateTime: dateTime);
-                    },
-                    label: Text("Submit"),
-                  ),
-                ),
-              ],
-            );
-          },
+              ),
         ),
       ),
     );
