@@ -1,15 +1,15 @@
-import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
+import 'package:flutter_project_1/data/authorization/session.dart';
 
 class AuthorizationResult {
   final bool success;
   final String? reason;
-  final AuthCredential? user;
+  final Session? session;
 
-  const AuthorizationResult({required this.success, required this.reason, required this.user});
+  const AuthorizationResult({required this.success, required this.reason, required this.session});
 
   static const noDebugResult = AuthorizationResult(
     success: false,
     reason: "App is calling debug mode features in release mode",
-    user: null,
+    session: null,
   );
 }

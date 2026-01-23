@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
 import 'package:flutter_project_1/data/authorization/authorization_result.dart';
 import 'package:flutter_project_1/data/authorization/service/i_auth.dart';
+import 'package:flutter_project_1/data/authorization/session.dart';
 import 'package:flutter_project_1/data/mocks/mock_user_db.dart';
-import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
 
 class MockAuthorization implements IAuthorization {
   @override
@@ -24,8 +25,8 @@ class MockAuthorization implements IAuthorization {
 
       return AuthorizationResult(
         success: foundUser != null,
-        reason: foundUser != null ? foundUser.username : "invalid credentials",
-        user: foundUser,
+        reason: foundUser?.username ?? "invalid credentials",
+        session: foundUser?.toSession(),
       );
     }
   }
@@ -35,5 +36,11 @@ class MockAuthorization implements IAuthorization {
     if (!kDebugMode) return;
 
     // TODO notify repo
+  }
+}
+
+extension on AuthCredential {
+  Session toSession() {
+    return Session("", this, .authenticated);
   }
 }
