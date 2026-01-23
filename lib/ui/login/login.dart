@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
+  static const routeName = "/login";
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -55,13 +57,13 @@ class _LoginState extends State<Login> {
                   ),
                   TextFormField(
                     // TODO add validator
-                    obscureText: _passwordVisibility,
+                    obscureText: !_passwordVisibility,
                     decoration: InputDecoration(
                       labelText: "Password",
                       suffixIcon: IconButton(
                         onPressed: togglePasswordVisibility,
                         icon: Icon(
-                          _passwordVisibility
+                          !_passwordVisibility
                               ? Icons.visibility
                               : Icons.visibility_off,
                         ),
@@ -71,8 +73,8 @@ class _LoginState extends State<Login> {
                   ),
                   ElevatedButton(onPressed: () {
                     value.submitLogin(
-                        usernameController: usernameController,
-                        passwordController: passwordController);
+                        username: usernameController.text,
+                        key: passwordController.text);
                   },
                       child: Text("Login")),
                 ],
