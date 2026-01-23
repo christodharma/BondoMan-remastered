@@ -1,9 +1,9 @@
-import 'package:flutter_project_1/data/user.dart';
+import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
 
 class AuthorizationResult {
   final bool success;
   final String? reason;
-  final User? user;
+  final AuthCredential? user;
 
   const AuthorizationResult({required this.success, required this.reason, required this.user});
 

@@ -1,14 +1,16 @@
-class User {
+class AuthCredential {
   final String username;
   final String key;
 
-  const User._(this.username, this.key);
+  const AuthCredential._(this.username, this.key);
 
-  factory User(String user, String password) {
-    return User._(user, _hashPassword(password));
+  factory AuthCredential(String user, String password) {
+    return AuthCredential._(user, _hashPassword(password));
   }
 
   Map<String, dynamic> toJson() => {'username': username, 'key': key};
+
+  static final nullAuthCredential = AuthCredential("noLogin", "");
 
   static String _hashPassword(String password) {
     // TODO implement password hashing
@@ -19,7 +21,7 @@ class User {
   //TODO consider object equality comparison for login verification
   @override
   bool operator ==(Object other) =>
-      other is User && username == other.username && key == other.key;
+      other is AuthCredential && username == other.username && key == other.key;
 
   @override
   // TODO: implement hashCode
