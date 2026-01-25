@@ -63,18 +63,15 @@ class _LoginState extends State<Login> {
     if (RegExp(r'^[\x21-\x7E]$').hasMatch(password)) {
       return "Enter valid password";
     }
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      RouteGenerator.routeMap[RouteNames.history]!,
-      (_) => false,
-    );
     return null;
   }
 
   void _respondToLoginResult(bool isSuccess) {
     if (isSuccess) {
-      Navigator.of(
-        context,
-      ).pushReplacementNamed(RouteGenerator.routeMap[RouteNames.history]!);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        RouteGenerator.routeMap[RouteNames.home]!,
+        (_) => false,
+      );
     } else {
       ScaffoldMessenger.of(
         context,

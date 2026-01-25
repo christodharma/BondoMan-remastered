@@ -2,20 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
+import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
 import 'package:flutter_project_1/data/authorization/service/i_auth.dart';
 import 'package:flutter_project_1/data/authorization/session.dart';
-
-abstract interface class IAuthorizationRepository {
-  Session get getSession;
-
-  Stream<AuthState> get onStateChange;
-
-  void setState(AuthState state);
-
-  Future<bool> authorize(AuthCredential cred);
-
-  Future<void> removeSession();
-}
 
 class AuthorizationRepository extends ChangeNotifier
     implements IAuthorizationRepository {
@@ -47,12 +36,11 @@ class AuthorizationRepository extends ChangeNotifier
   @override
   Future<bool> authorize(AuthCredential cred) async {
     var result = await service.signIn(username: cred.username, key: cred.key);
-    if (result.success){
+    if (result.success) {
       _setCredential(cred);
       setState(.authenticated);
       return true;
-    }
-    else {
+    } else {
       _setCredential(.nullAuthCredential);
       setState(.guest);
       return false;
@@ -66,8 +54,8 @@ class AuthorizationRepository extends ChangeNotifier
     setState(_session.state); // state = guest
   }
 
-  void _setCredential(AuthCredential cred){
-    if (_session == .nullSession){
+  void _setCredential(AuthCredential cred) {
+    if (_session == .nullSession) {
       _session = Session("", cred, .guest);
     } else {
       _session.cred = cred;

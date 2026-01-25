@@ -1,5 +1,6 @@
 import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
 import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
+import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
 import 'package:flutter_project_1/data/authorization/service/mock_auth.dart';
 import 'package:flutter_project_1/data/authorization/service/supabase_auth.dart';
 import 'package:flutter_project_1/data/authorization/session.dart' as local;

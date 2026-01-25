@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class History extends StatelessWidget {
   const History({super.key});
 
-  static const routeName = "/";
+  static const routeName = "/history";
 
   @override
   Widget build(BuildContext context) {
