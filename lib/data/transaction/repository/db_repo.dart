@@ -18,6 +18,7 @@ class TransactionDbRepository extends ChangeNotifier {
   Future<List<Transaction>> getAll() async {
     if (_cache != null) return _cache!;
     _cache = await conn.readAll();
+    notifyListeners();
     return _cache!;
   }
 
