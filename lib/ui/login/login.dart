@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_project_1/ui/login/login_viewmodel.dart';
 import 'package:flutter_project_1/ui/route_generator.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,11 +22,6 @@ class _LoginState extends State<Login> {
   static const String usernameFieldLabel = "Username";
   static const String passwordFieldLabel = "Password";
   static const String buttonLabel = "Login";
-
-  void showLoginSnackBar(String text) {
-    final snackBar = SnackBar(content: Text(text));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   void togglePasswordVisibility() {
     setState(() {
@@ -83,7 +78,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) =>
-          LoginViewModel(context.read<AuthorizationRepository>()),
+          LoginViewModel(context.read<IAuthorizationRepository>()),
       child: Scaffold(
         body: Consumer<LoginViewModel>(
           builder:

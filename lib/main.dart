@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
-import 'package:flutter_project_1/data/authorization/service/supabase_auth.dart';
+import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
+import 'package:flutter_project_1/data/authorization/repository/supabase_auth_repo.dart';
 import 'package:flutter_project_1/data/external_service/supabase_adaptor.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/service/mock_transaction_db_conn.dart';
@@ -19,9 +19,9 @@ void main() async {
           create: (context) =>
               TransactionDbRepository(MockTransactionDbConnection()),
         ),
-        ChangeNotifierProvider(
+        Provider<IAuthorizationRepository>(
           create: (context) =>
-              AuthorizationRepository(SupabaseAuth(SupabaseEnvironment.client)),
+              SupabaseAuthRepo(SupabaseEnvironment.client.auth),
         ),
       ],
       child: MyApp(),

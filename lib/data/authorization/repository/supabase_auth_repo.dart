@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
 import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
 import 'package:flutter_project_1/data/authorization/session.dart' as local;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseAuthRepo extends ChangeNotifier implements IAuthorizationRepository {
+class SupabaseAuthRepo implements IAuthorizationRepository {
   final GoTrueClient _auth;
 
   SupabaseAuthRepo(this._auth);
