@@ -18,4 +18,14 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => CircularProgressIndicator());
     }
   }
+
+  static const routeMap = <RouteNames, String> {
+    .history : History.routeName,
+    .login : Login.routeName,
+    .transactionInput : TransactionInput.routeName
+  };
+}
+
+enum RouteNames {
+  history, login, transactionInput, camera, graphs, settings, nullRoute
 }

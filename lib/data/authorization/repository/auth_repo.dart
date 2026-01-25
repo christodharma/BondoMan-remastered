@@ -12,7 +12,7 @@ abstract interface class IAuthorizationRepository {
 
   void setState(AuthState state);
 
-  Future<void> authorize(AuthCredential cred);
+  Future<bool> authorize(AuthCredential cred);
 
   Future<void> removeSession();
 }
@@ -45,15 +45,17 @@ class AuthorizationRepository extends ChangeNotifier
   }
 
   @override
-  Future<void> authorize(AuthCredential cred) async {
+  Future<bool> authorize(AuthCredential cred) async {
     var result = await service.signIn(username: cred.username, key: cred.key);
     if (result.success){
       _setCredential(cred);
       setState(.authenticated);
+      return true;
     }
     else {
-      // TODO add AuthorizationResult handles
-      return;
+      _setCredential(.nullAuthCredential);
+      setState(.guest);
+      return false;
     }
   }
 

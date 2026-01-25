@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
 import 'package:flutter_project_1/ui/login/login_viewmodel.dart';
+import 'package:flutter_project_1/ui/route_generator.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
@@ -59,10 +60,26 @@ class _LoginState extends State<Login> {
 
   String? _checkIsInjection(String? password) {
     if (password == null) return null;
-    if (RegExp(r'^[\x21-\x7E]{8,}$').hasMatch(password)) {
+    if (RegExp(r'^[\x21-\x7E]$').hasMatch(password)) {
       return "Enter valid password";
     }
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      RouteGenerator.routeMap[RouteNames.history]!,
+      (_) => false,
+    );
     return null;
+  }
+
+  void _respondToLoginResult(bool isSuccess) {
+    if (isSuccess) {
+      Navigator.of(
+        context,
+      ).pushReplacementNamed(RouteGenerator.routeMap[RouteNames.history]!);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Login failed")));
+    }
   }
 
   @override
@@ -128,10 +145,15 @@ class _LoginState extends State<Login> {
                           ElevatedButton(
                             onPressed: () {
                               if (!_formKey.currentState!.validate()) return;
-                              value.submitLogin(
-                                username: usernameController.text,
-                                key: passwordController.text,
-                              );
+                              value
+                                  .submitLogin(
+                                    username: usernameController.text,
+                                    key: passwordController.text,
+                                  )
+                                  .then((response) {
+                                    if (!context.mounted) return;
+                                    _respondToLoginResult(response);
+                                  });
                             },
                             child: const Text(buttonLabel),
                           ),
