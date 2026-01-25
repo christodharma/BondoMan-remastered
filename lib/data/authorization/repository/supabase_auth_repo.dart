@@ -5,10 +5,10 @@ import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart
 import 'package:flutter_project_1/data/authorization/session.dart' as local;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseAuthRepo implements IAuthorizationRepository {
+class SupabaseAuthorizationRepository implements IAuthorizationRepository {
   final GoTrueClient _auth;
 
-  SupabaseAuthRepo(this._auth);
+  SupabaseAuthorizationRepository(this._auth);
 
   @override
   Future<bool> authorize(AuthCredential cred) async {

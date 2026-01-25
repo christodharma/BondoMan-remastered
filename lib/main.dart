@@ -21,7 +21,7 @@ void main() async {
         ),
         Provider<IAuthorizationRepository>(
           create: (context) =>
-              SupabaseAuthRepo(SupabaseEnvironment.client.auth),
+              SupabaseAuthorizationRepository(SupabaseEnvironment.client.auth),
         ),
       ],
       child: MyApp(),
