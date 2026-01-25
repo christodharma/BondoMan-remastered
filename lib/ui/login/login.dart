@@ -74,6 +74,18 @@ class _LoginState extends State<Login> {
     }
   }
 
+  void _preFetchSession() => WidgetsBinding.instance.addPostFrameCallback(
+    (_) => _respondToLoginResult(
+      context.read<IAuthorizationRepository>().getSession != .nullSession,
+    ),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _preFetchSession();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
