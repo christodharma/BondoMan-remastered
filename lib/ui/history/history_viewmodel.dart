@@ -11,6 +11,14 @@ class HistoryViewModel extends ChangeNotifier {
   bool get isLoading => _loading;
   List<Transaction> get transactions => _transactions;
 
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   HistoryViewModel(this._repo) {
     _repo.addListener(_onAdd);
   }
@@ -19,14 +27,18 @@ class HistoryViewModel extends ChangeNotifier {
     load();
   }
 
+  void _safeNotifyListeners(){
+    if (!_isDisposed) notifyListeners();
+  }
+
   Future<void> load() async {
     _loading = true;
-    notifyListeners();
+    _safeNotifyListeners();
 
     _transactions = await _repo.getAll();
 
     _loading = false;
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   // TODO route to transaction edit
