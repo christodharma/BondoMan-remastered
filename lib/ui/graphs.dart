@@ -6,7 +6,11 @@ class Graphs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(child: Text("This is the graphs page"),),
+      body: const Center(
+        child: Text('''
+      This is the graphs page. Keep watch for more updates!
+      '''),
+      ),
     );
   }
 }

@@ -23,24 +23,29 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: .start,
-        crossAxisAlignment: .stretch,
-        children: [
-          ElevatedButton.icon(
-            onPressed: saveTransactions,
-            label: Text("Simpan daftar transaksi"),
-          ),
-          ElevatedButton.icon(
-            onPressed: sendTransactions,
-            label: Text("Kirim daftar transaksi"),
-          ),
-          ElevatedButton.icon(
-            onPressed: logout,
-            label: Text("Keluar", style: TextStyle(color: Colors.red)),
-          ),
-        ],
+      body: const Center(
+        child: Text('''
+        This is settings page. Keep watch for more updates!
+        '''),
       ),
+      // body: Column(
+      //   mainAxisAlignment: .start,
+      //   crossAxisAlignment: .stretch,
+      //   children: [
+      //     ElevatedButton.icon(
+      //       onPressed: saveTransactions,
+      //       label: Text("Simpan daftar transaksi"),
+      //     ),
+      //     ElevatedButton.icon(
+      //       onPressed: sendTransactions,
+      //       label: Text("Kirim daftar transaksi"),
+      //     ),
+      //     ElevatedButton.icon(
+      //       onPressed: logout,
+      //       label: Text("Keluar", style: TextStyle(color: Colors.red)),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
