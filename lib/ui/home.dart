@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/ui/settings.dart';
-import 'package:flutter_project_1/ui/graphs.dart';
+import 'package:flutter_project_1/ui/graphs/graphs.dart';
 import 'package:flutter_project_1/ui/history/history.dart';
 
 class HomePage extends StatefulWidget {

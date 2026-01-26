@@ -4,7 +4,7 @@ import 'package:flutter_project_1/data/authorization/authorization_credential.da
 // a mock external_service system for user authentication db
 class TestUserList {
   static final List<AuthCredential> _users = [
-    AuthCredential("Christo", "Test!123")
+    AuthCredential("Christo@dev.yup", "Test!123")
   ];
 
   static List<AuthCredential> get users {
