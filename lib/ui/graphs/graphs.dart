@@ -74,6 +74,9 @@ class Graphs extends StatelessWidget {
                           GraphsViewModel value,
                           Widget? child,
                         ) {
+                          if (value.isLoading) {
+                            return const CircularProgressIndicator();
+                          }
                           return PieChart(
                             PieChartData(
                               sections: displayExpenseIncomeRatio(

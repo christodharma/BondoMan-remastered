@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
-import 'package:flutter_project_1/data/transaction/transaction.dart';
 
 class GraphsViewModel extends ChangeNotifier {
   final TransactionDbRepository _repo;
@@ -11,12 +10,19 @@ class GraphsViewModel extends ChangeNotifier {
   double _totalSend = 0;
   double _totalReceive = 0;
 
+  bool get isLoading => _loading;
   double get totalSend => _totalSend;
   double get totalReceive => _totalReceive;
 
   GraphsViewModel(this._repo) {
     // TODO? convert to home page view model?
     _repo.addListener(_onAdd);
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
   }
 
   void _onAdd() {
