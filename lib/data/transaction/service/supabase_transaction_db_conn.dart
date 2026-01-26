@@ -54,8 +54,6 @@ extension TransactionMapper on Map<String, dynamic> {
 extension JsonMapper on Transaction {
   Map<String, dynamic> toJSON() {
     return {
-      // FIXME consider proper structure
-      'user_id': Supabase.instance.client.auth.currentSession!.user.id,
       'item_name': name,
       'nominal': nominal,
       'is_expense': category == .send ? true : false,
