@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project_1/data/transaction/repository/db_repo.dart';
 import 'package:flutter_project_1/data/transaction/transaction.dart';
 import 'package:flutter_project_1/ui/history/history_viewmodel.dart';
-import 'package:flutter_project_1/ui/transaction_input/transaction_input.dart';
+import 'package:flutter_project_1/ui/route_generator.dart';
 import 'package:provider/provider.dart';
 
 class History extends StatelessWidget {
@@ -38,7 +38,9 @@ class History extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, TransactionInput.routeName);
+            Navigator.of(
+              context,
+            ).pushNamed(RouteGenerator.routeMap[RouteNames.transactionInput]!);
           },
           child: const Icon(Icons.add),
         ),
