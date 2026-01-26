@@ -5,36 +5,46 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseTransactionDbConn implements ITransactionDbConnection {
   final SupabaseClient client;
 
+  static const String _transactionsTable = "transactions";
+
   SupabaseTransactionDbConn(this.client);
 
   @override
   Future<bool> create(Transaction transaction) async {
-    await client.from("transactions").insert(transaction.toJSON());
+    await client.from(_transactionsTable).insert(transaction.toJSON());
     return true;
   }
 
   @override
-  Future<bool> delete(Transaction transaction) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool> delete(Transaction transaction) async {
+    await client.from(_transactionsTable).delete().eq('id', transaction.id!);
+    return true;
   }
 
   @override
-  Future<List<Transaction>> read(Transaction query) {
-    // TODO: implement read
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Transaction>> readAll() async {
-    var response = await client.from("transactions").select();
+  Future<List<Transaction>> read(Transaction query) async {
+    var searchParams = query.toJSONSearchParams();
+    var builder = client.from(_transactionsTable).select();
+    for (var entry in searchParams.entries) {
+      builder.eq(entry.key, entry.value);
+    }
+    var response = await builder;
     return response.map((e) => e.toTransaction()).toList();
   }
 
   @override
-  Future<bool> update(Transaction transaction) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<List<Transaction>> readAll() async {
+    var response = await client.from(_transactionsTable).select();
+    return response.map((e) => e.toTransaction()).toList();
+  }
+
+  @override
+  Future<bool> update(Transaction transaction) async {
+    await client
+        .from(_transactionsTable)
+        .update(transaction.toJSON())
+        .eq('id', transaction.id!);
+    return true;
   }
 }
 
@@ -60,5 +70,29 @@ extension JsonMapper on Transaction {
       'location': location,
       'created_at': dateTime!.toIso8601String(),
     };
+  }
+
+  Map<String, dynamic> toJSONSearchParams() {
+    if (id != null) {
+      return {'id': id};
+    } else {
+      var map = <String, dynamic>{};
+      if (name != null) {
+        map.addAll({'item_name': name});
+      }
+      if (nominal != null) {
+        map.addAll({'nominal': nominal});
+      }
+      if (category != null) {
+        map.addAll({'is_expense': category});
+      }
+      if (location != null) {
+        map.addAll({'location': location});
+      }
+      if (dateTime != null) {
+        map.addAll({'created_at': dateTime!.toIso8601String()});
+      }
+      return map;
+    }
   }
 }
