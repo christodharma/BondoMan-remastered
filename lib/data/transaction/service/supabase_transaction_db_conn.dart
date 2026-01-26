@@ -8,9 +8,9 @@ class SupabaseTransactionDbConn implements ITransactionDbConnection {
   SupabaseTransactionDbConn(this.client);
 
   @override
-  Future<bool> create(Transaction transaction) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<bool> create(Transaction transaction) async {
+    await client.from("transactions").insert(transaction.toJSON());
+    return true;
   }
 
   @override
@@ -39,7 +39,7 @@ class SupabaseTransactionDbConn implements ITransactionDbConnection {
 }
 
 extension TransactionMapper on Map<String, dynamic> {
-  Transaction toTransaction(){
+  Transaction toTransaction() {
     return Transaction(
       id: this['id'] as int,
       name: this['item_name'],
@@ -48,5 +48,19 @@ extension TransactionMapper on Map<String, dynamic> {
       location: this['location'],
       dateTime: DateTime.tryParse(this['created_at']),
     );
+  }
+}
+
+extension JsonMapper on Transaction {
+  Map<String, dynamic> toJSON() {
+    return {
+      // FIXME consider proper structure
+      'user_id': Supabase.instance.client.auth.currentSession!.user.id,
+      'item_name': name,
+      'nominal': nominal,
+      'is_expense': category == .send ? true : false,
+      'location': location,
+      'created_at': dateTime!.toIso8601String(),
+    };
   }
 }
