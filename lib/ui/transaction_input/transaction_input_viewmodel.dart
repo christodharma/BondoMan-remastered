@@ -11,7 +11,7 @@ class TransactionInputViewModel extends ChangeNotifier {
   Future<bool> submitTransaction({
     required String name,
     required String nominalString,
-    required int categoryInt,
+    required bool isExpense,
     required String location,
     required DateTime dateTime,
   }) async {
@@ -19,8 +19,8 @@ class TransactionInputViewModel extends ChangeNotifier {
       errorMessage = "All fields must be filled!";
       return false;
     }
-    var category = categoryInt == 0 ? Category.send : Category.receive;
-    return repo.create(
+    var category = isExpense ? Category.send : Category.receive;
+    return await repo.create(
       Transaction.withNoId(
         name: name,
         nominal: double.parse(nominalString),

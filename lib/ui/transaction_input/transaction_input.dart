@@ -17,7 +17,7 @@ class _TransactionInputState extends State<TransactionInput> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _nominalController = TextEditingController();
-  final _categoryKey = GlobalKey<FormFieldState<int>>();
+  final _categoryKey = GlobalKey<FormFieldState<bool>>();
   final _locationController = TextEditingController();
   final _dateTimeKey = GlobalKey<FormFieldState<DateTime>>();
 
@@ -37,6 +37,35 @@ class _TransactionInputState extends State<TransactionInput> {
     _nominalController.dispose();
     _locationController.dispose();
     super.dispose();
+  }
+
+  void _submit(TransactionInputViewModel vm) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Submitting transaction..')));
+
+    vm
+        .submitTransaction(
+          name: _nameController.text,
+          nominalString: _nominalController.text,
+          isExpense: _categoryKey.currentState!.value!,
+          location: _locationController.text,
+          dateTime: _dateTimeKey.currentState!.value!,
+        )
+        .then((response) {
+          if (!context.mounted) return;
+          _respondToSubmitSuccess(response);
+        });
+  }
+
+  void _respondToSubmitSuccess(bool response) {
+    if (response) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Success!')));
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -91,7 +120,7 @@ class _TransactionInputState extends State<TransactionInput> {
                       validator: _validateTextInput,
                     ),
                     // input category
-                    FormField<int>(
+                    FormField<bool>(
                       key: _categoryKey,
                       validator: (value) {
                         if (value == null) {
@@ -100,21 +129,21 @@ class _TransactionInputState extends State<TransactionInput> {
                         return null;
                       },
                       builder: (state) {
-                        return RadioGroup<int>(
+                        return RadioGroup<bool>(
                           groupValue: state.value,
-                          onChanged: (int? value) {
+                          onChanged: (bool? value) {
                             state.didChange(value);
                           },
                           child: Column(
                             children: [
                               Text("Category"),
                               RadioListTile(
-                                value: 0,
+                                value: true,
                                 activeColor: Colors.red,
                                 title: const Text("Pengeluaran"),
                               ),
                               RadioListTile(
-                                value: 1,
+                                value: false,
                                 activeColor: Colors.green,
                                 title: const Text("Pemasukan"),
                               ),
@@ -185,17 +214,7 @@ class _TransactionInputState extends State<TransactionInput> {
                           );
                           return;
                         }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing...')),
-                        );
-                        value.submitTransaction(
-                          name: _nameController.text,
-                          nominalString: _nominalController.text,
-                          categoryInt: _categoryKey.currentState!.value!,
-                          location: _locationController.text,
-                          dateTime: _dateTimeKey.currentState!.value!,
-                        );
+                        _submit(value);
                       },
                       label: Text("Submit"),
                     ),
