@@ -1,12 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_project_1/data/user.dart';
+import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
 
-// a mock external system for user authentication db
+// a mock external_service system for user authentication db
 class TestUserList {
-  static List<User> get users {
+  static final List<AuthCredential> _users = [
+    AuthCredential("Christo", "Test!123")
+  ];
+
+  static List<AuthCredential> get users {
     if (!kDebugMode) {
       throw Exception("App called debug mode features in release mode");
     }
-    return <User>[User("Christo", "Test!123")];
+    return _users;
   }
+
+  static void signUp(AuthCredential newCred) => _users.add(newCred);
 }

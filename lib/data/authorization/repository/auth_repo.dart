@@ -1,40 +1,62 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_project_1/data/authorization/authorization_result.dart';
+import 'dart:async';
+
+import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
+import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
 import 'package:flutter_project_1/data/authorization/service/i_auth.dart';
-import 'package:flutter_project_1/data/user.dart';
+import 'package:flutter_project_1/data/authorization/session.dart';
 
-abstract interface class IAuthorizationRepository {
-  Future<AuthorizationResult> login({
-    required String username,
-    required String key,
-  });
-
-  // Future<bool> logout(User user);
-}
-
-class AuthorizationRepository extends ChangeNotifier
-    implements IAuthorizationRepository {
+class AuthorizationRepository implements IAuthorizationRepository {
   final IAuthorization service;
 
   AuthorizationRepository(this.service);
 
-  User? _currentUser;
+  Session _session = .nullSession;
+  final StreamController<AuthState> _streamController =
+      StreamController<AuthState>.broadcast();
 
   @override
-  Future<AuthorizationResult> login({
-    required String username,
-    required String key,
-  }) async {
-    if (_currentUser != null) {
-      return AuthorizationResult(
-        success: true,
-        reason: "login with active session",
-        user: _currentUser,
-      );
+  Session get getSession => _session;
+
+  @override
+  Stream<AuthState> get onStateChange => _streamController.stream;
+
+  @override
+  void setState(AuthState state) {
+    if (_session == .nullSession) {
+      _session = Session("", .nullAuthCredential, state);
+    } else {
+      _session.state = state;
     }
 
-    var result = await service.authorize(username: username, key: key);
-    _currentUser = result.user;
-    return result;
+    _streamController.add(state);
+  }
+
+  @override
+  Future<bool> authorize(AuthCredential cred) async {
+    var result = await service.signIn(username: cred.username, key: cred.key);
+    if (result.success) {
+      _setCredential(cred);
+      setState(.authenticated);
+      return true;
+    } else {
+      _setCredential(.nullAuthCredential);
+      setState(.guest);
+      return false;
+    }
+  }
+
+  @override
+  Future<void> removeSession() async {
+    await service.signOut();
+    _session = .nullSession;
+    setState(_session.state); // state = guest
+  }
+
+  void _setCredential(AuthCredential cred) {
+    if (_session == .nullSession) {
+      _session = Session("", cred, .guest);
+    } else {
+      _session.cred = cred;
+    }
   }
 }

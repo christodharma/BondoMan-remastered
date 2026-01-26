@@ -11,13 +11,14 @@ class TransactionDbRepository extends ChangeNotifier {
   Future<bool> create(Transaction transaction) async {
     var result = await conn.create(transaction);
     _cache = null;
-    notifyListeners();
+    notifyListeners(); // TODO consider using Stream instead
     return result;
   }
 
   Future<List<Transaction>> getAll() async {
     if (_cache != null) return _cache!;
     _cache = await conn.readAll();
+    notifyListeners();
     return _cache!;
   }
 

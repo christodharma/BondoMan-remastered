@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/data/authorization/repository/auth_repo.dart';
+import 'package:flutter_project_1/data/authorization/authorization_credential.dart';
+import 'package:flutter_project_1/data/authorization/repository/i_auth_repo.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final IAuthorizationRepository _auth;
 
   LoginViewModel(this._auth);
 
-  Future<void> submitLogin({
-    required TextEditingController usernameController,
-    required TextEditingController passwordController,
+  Future<bool> submitLogin({
+    required String username,
+    required String key,
   }) async {
-    var authResult = await _auth.login(
-      username: usernameController.text,
-      key: passwordController.text,
-    );
-    if (authResult.success){
-      // login success
-      // TODO redirect
-      print(authResult.reason);
-    } else {
-      print(authResult.reason);
-    }
+    return await _auth.authorize(AuthCredential(username, key));
   }
 }
