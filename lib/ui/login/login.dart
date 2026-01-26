@@ -70,7 +70,7 @@ class _LoginState extends State<Login> {
     } else {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Login failed")));
+      ).showSnackBar(const SnackBar(content: Text("No active session. Please log in!")));
     }
   }
 
