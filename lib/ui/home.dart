@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/ui/settings.dart';
+import 'package:flutter_project_1/ui/settings/settings.dart';
 import 'package:flutter_project_1/ui/graphs/graphs.dart';
 import 'package:flutter_project_1/ui/history/history.dart';
 
