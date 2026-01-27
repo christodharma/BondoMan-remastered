@@ -62,9 +62,9 @@ class SupabaseAuthorizationRepository implements IAuthorizationRepository {
 extension on Session {
   local.Session toLocalSession() {
     return local.Session(
-      accessToken,
-      AuthCredential(user.id, ""),
-      isExpired ? .authenticated : .guest,
+      id: accessToken,
+      cred: AuthCredential(user.id, ""),
+      state: isExpired ? .authenticated : .guest,
     );
   }
 }

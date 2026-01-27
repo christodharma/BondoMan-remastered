@@ -13,10 +13,10 @@ class MockAuthorization implements IAuthorization {
   }) async {
     if (!kDebugMode) return .noDebugResult; // reject release mode calls
     {
-      var _user = AuthCredential(username, key);
+      var user = AuthCredential(username, key);
       AuthCredential? foundUser;
       try {
-        foundUser = TestUserList.users.firstWhere((user) => user == _user);
+        foundUser = TestUserList.users.firstWhere((u) => u == user);
       } on StateError {
         foundUser = null;
       }
@@ -41,6 +41,6 @@ class MockAuthorization implements IAuthorization {
 
 extension on AuthCredential {
   Session toSession() {
-    return Session("", this, .authenticated);
+    return Session(id: "", cred: this, state: .authenticated);
   }
 }

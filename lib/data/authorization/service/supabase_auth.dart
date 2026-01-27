@@ -34,9 +34,9 @@ extension on AuthResponse {
         success: true,
         reason: "success",
         session: local.Session(
-          session!.accessToken,
-          AuthCredential(user!.email!, ""),
-          .authenticated,
+          id: session!.accessToken,
+          cred: AuthCredential(user!.email!, ""),
+          state: .authenticated,
         ),
       );
     } else {
