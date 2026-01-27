@@ -10,7 +10,7 @@ class AuthCredential {
 
   Map<String, dynamic> toJson() => {'username': username, 'key': key};
 
-  static final nullAuthCredential = AuthCredential("noLogin", "");
+  static const nullAuthCredential = AuthCredential._("noLogin", "");
 
   static String _hashPassword(String password) {
     // TODO implement password hashing

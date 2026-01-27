@@ -22,12 +22,7 @@ class AuthorizationRepository implements IAuthorizationRepository {
 
   @override
   void setState(AuthState state) {
-    if (_session == .nullSession) {
-      _session = Session("", .nullAuthCredential, state);
-    } else {
-      _session.state = state;
-    }
-
+    _session = Session.changeState(_session, state);
     _streamController.add(state);
   }
 
@@ -49,14 +44,10 @@ class AuthorizationRepository implements IAuthorizationRepository {
   Future<void> removeSession() async {
     await service.signOut();
     _session = .nullSession;
-    setState(_session.state); // state = guest
+    _streamController.add(_session.state);
   }
 
   void _setCredential(AuthCredential cred) {
-    if (_session == .nullSession) {
-      _session = Session("", cred, .guest);
-    } else {
-      _session.cred = cred;
-    }
+    _session = Session.changeCredential(_session, cred);
   }
 }
