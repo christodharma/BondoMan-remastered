@@ -34,8 +34,6 @@ class MockAuthorization implements IAuthorization {
   @override
   Future<void> signOut() async {
     if (!kDebugMode) return;
-
-    // TODO notify repo
   }
 }
 

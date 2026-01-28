@@ -40,12 +40,12 @@ class Settings extends StatelessWidget {
                     },
                     label: Text("Simpan daftar transaksi"),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      await value.exportAndSendToEmail();
-                    },
-                    label: Text("Kirim daftar transaksi"),
-                  ),
+                  // ElevatedButton.icon(
+                  //   onPressed: () async {
+                  //     await value.exportAndSendToEmail();
+                  //   },
+                  //   label: Text("Kirim daftar transaksi"),
+                  // ),
                   ElevatedButton.icon(
                     onPressed: () {
                       value2.removeSession().then((_) {

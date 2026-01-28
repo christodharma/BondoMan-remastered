@@ -13,17 +13,13 @@ class AuthCredential {
   static const nullAuthCredential = AuthCredential._("noLogin", "");
 
   static String _hashPassword(String password) {
-    // TODO implement password hashing
-
     return password;
   }
 
-  //TODO consider object equality comparison for login verification
   @override
   bool operator ==(Object other) =>
       other is AuthCredential && username == other.username && key == other.key;
 
   @override
-  // TODO: implement hashCode
   int get hashCode => Object.hash(username, key);
 }

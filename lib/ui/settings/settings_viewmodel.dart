@@ -15,7 +15,5 @@ class SettingsViewModel extends ChangeNotifier {
     await exporter.export(transactions);
   }
 
-  Future<void> exportAndSendToEmail() async {
-    // TODO implement
-  }
+  Future<void> exportAndSendToEmail() async {}
 }

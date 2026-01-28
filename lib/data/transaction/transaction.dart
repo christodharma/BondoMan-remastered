@@ -21,7 +21,7 @@ class Transaction {
     required this.category,
     required this.location,
     required this.dateTime,
-  }) : id = null; // TODO make an UID generator
+  }) : id = null;
 
   Transaction.addId(Transaction old, int this.id)
     : name = old.name,

@@ -11,7 +11,7 @@ class TransactionDbRepository extends ChangeNotifier {
   Future<bool> create(Transaction transaction) async {
     var result = await conn.create(transaction);
     _cache = null;
-    notifyListeners(); // TODO consider using Stream instead
+    notifyListeners();
     return result;
   }
 
@@ -21,6 +21,4 @@ class TransactionDbRepository extends ChangeNotifier {
     notifyListeners();
     return _cache!;
   }
-
-  // TODO add editing transactions
 }

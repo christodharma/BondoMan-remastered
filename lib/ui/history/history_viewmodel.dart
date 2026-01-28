@@ -41,6 +41,5 @@ class HistoryViewModel extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  // TODO route to transaction edit
   void editTransaction() {}
 }

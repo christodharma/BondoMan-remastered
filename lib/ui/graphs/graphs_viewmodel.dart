@@ -15,7 +15,6 @@ class GraphsViewModel extends ChangeNotifier {
   double get totalReceive => _totalReceive;
 
   GraphsViewModel(this._repo) {
-    // TODO? convert to home page view model?
     _repo.addListener(_onAdd);
   }
 
